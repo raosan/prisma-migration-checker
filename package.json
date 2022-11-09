@@ -41,6 +41,7 @@
     "bin": "prisma-migrate-checker",
     "dirname": "prisma-migrate-checker",
     "commands": "./dist/commands",
+    "default": ".",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"
