@@ -40,11 +40,7 @@ prisma-migration-checker --new prisma/schema.prisma --current prisma/schema-main
 ```
 
 # Development
-clone the repo, then install dependencies using
-
-```
-npm install
-```
+clone the repo.
 
 if you want to use `prisma-seeder` locally, you can build it by running `npm pack --pack-destination ~` in the `prisma-seeder` directory.
 Then find the generated file on `~/hyperjumptech-prisma-seeder-0.0.3.tgz` (version is defined in package.json). Then update your `package.json > dependences`
@@ -57,7 +53,13 @@ Then find the generated file on `~/hyperjumptech-prisma-seeder-0.0.3.tgz` (versi
   }
 ```
 
-then run
+then install dependencies using
+
+```
+npm install
+```
+
+then run this to start the package
 
 ```
 ./bin/dev --new <path_to_the_new_schema> --current <path_to_the_existing_schema> --database-url <url_of_the_database>

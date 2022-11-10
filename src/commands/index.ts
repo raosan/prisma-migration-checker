@@ -51,13 +51,26 @@ Finish checking.
     execSync(`cp ${flags.new} ./prisma/new-schema.prisma`);
     execSync(`cp ${flags.current} ./prisma/current-schema.prisma`);
 
+    // reset DB
+    this.log("Resetting DB...");
+    execSync("rm -rf migrations");
+    execSync(`npx prisma migrate reset --force --skip-generate --schema=${flags.current}`);
+
+    // migrating current schema
+    this.log("Migrating current schema...");
+    execSync(`npx prisma migrate dev --name current --schema=${flags.current}`);
+
     // seeding fake data
     execSync(
       `./node_modules/.bin/prisma-seeder --schema ${flags.current} --database-url ${flags["database-url"]}`,
-      {stdio: 'inherit'}
+      { stdio: "inherit" }
     );
 
-    this.log('Finish checking.')
-    this.log('Migration success.')
+    // migrating new schema
+    this.log("Migrating new schema...");
+    execSync(`npx prisma migrate dev --name new --schema=${flags.new}`);
+
+    this.log("Finish checking.");
+    this.log("Migration success.");
   }
 }
