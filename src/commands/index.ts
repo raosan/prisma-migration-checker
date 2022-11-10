@@ -53,7 +53,8 @@ Finish checking.
 
     // seeding fake data
     execSync(
-      `./node_modules/.bin/prisma-seeder --schema ${flags.current} --database-url ${flags["database-url"]}`
+      `./node_modules/.bin/prisma-seeder --schema ${flags.current} --database-url ${flags["database-url"]}`,
+      {stdio: 'inherit'}
     );
 
     this.log('Finish checking.')
