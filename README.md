@@ -28,7 +28,7 @@ You need to provide two schema files which are the schema file with the new migr
 prisma-migration-checker --new <path_to_the_new_schema> --current <path_to_the_existing_schema>
 ```
 
-Not that before running Prisma Migration Checker, you need to have the database used in your prisma.schema running (Postgres, MongoDB, SQLite, etc).
+Note that before running Prisma Migration Checker, you need to have the database used in your prisma.schema running (Postgres, MongoDB, SQLite, etc).
 
 ## In CI Pipeline
 

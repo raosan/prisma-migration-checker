@@ -17,6 +17,7 @@
     "/oclif.manifest.json"
   ],
   "dependencies": {
+    "@hyperjumptch/prisma-seeder": "file:~/hyperjumptech-prisma-seeder-0.0.1.tgz",
     "@oclif/core": "^1.19.1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.6"
