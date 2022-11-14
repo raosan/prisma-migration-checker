@@ -10,5 +10,5 @@ node_modules
 oclif.manifest.json
 
 .env
-prisma
-migrations
+prisma-mc-temp
+prisma-seeder-temp

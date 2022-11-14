@@ -46,29 +46,35 @@ Finish checking.
 
     // copy prisma schema file
     this.log("Copying schema files...");
-    execSync("rm -rf prisma");
-    execSync("mkdir prisma");
-    execSync(`cp ${flags.new} ./prisma/new-schema.prisma`);
-    execSync(`cp ${flags.current} ./prisma/current-schema.prisma`);
+    execSync("rm -rf prisma-mc-temp");
+    execSync("mkdir prisma-mc-temp");
+    execSync(`cp ${flags.new} ./prisma-mc-temp/new-schema.prisma`);
+    execSync(`cp ${flags.current} ./prisma-mc-temp/current-schema.prisma`);
 
-    // reset DB
+    // // reset DB
     this.log("Resetting DB...");
-    execSync("rm -rf migrations");
     execSync(`npx prisma migrate reset --force --skip-generate --schema=${flags.current}`);
+
+    const curPrismaTempLocation = "./prisma-mc-temp/current-schema.prisma";
+    const newPrismaTempLocation = "./prisma-mc-temp/new-schema.prisma";
 
     // migrating current schema
     this.log("Migrating current schema...");
-    execSync(`npx prisma migrate dev --name current --schema=${flags.current}`);
+    execSync(
+      `npx prisma migrate dev --name current --schema=${curPrismaTempLocation}`
+    );
 
     // seeding fake data
     execSync(
-      `./node_modules/.bin/prisma-seeder --schema ${flags.current} --database-url ${flags["database-url"]}`,
+      `npx prisma-seeder --schema ${curPrismaTempLocation} --database-url ${flags["database-url"]}`,
       { stdio: "inherit" }
     );
 
     // migrating new schema
     this.log("Migrating new schema...");
-    execSync(`npx prisma migrate dev --name new --schema=${flags.new}`);
+    execSync(
+      `npx prisma migrate dev --name new --schema=${newPrismaTempLocation}`
+    );
 
     this.log("Finish checking.");
     this.log("Migration success.");

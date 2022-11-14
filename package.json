@@ -1,10 +1,10 @@
 {
-  "name": "prisma-migrate-checker",
-  "version": "0.0.0",
+  "name": "prisma-migration-checker",
+  "version": "0.0.3",
   "description": "Prisma Migration Checker is a CLI tool to check if new Prisma migrations can be applied safely to the database.",
   "author": "@hyperjumptech",
   "bin": {
-    "prisma-migrate-checker": "./bin/run"
+    "prisma-migration-checker": "./bin/run"
   },
   "homepage": "https://github.com/hyperjumptech/prisma-migration-checker",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "/oclif.manifest.json"
   ],
   "dependencies": {
-    "@hyperjumptch/prisma-seeder": "https://github.com/raosan/prisma-seeder/releases/download/v0.0.5/hyperjumptech-prisma-seeder-0.0.5.tgz",
+    "@hyperjumptch/prisma-seeder": "https://github.com/raosan/prisma-seeder/releases/download/v0.0.7/hyperjumptech-prisma-seeder-0.0.7.tgz",
     "@oclif/core": "^1.19.1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.6"
@@ -39,8 +39,8 @@
     "typescript": "^4.8.4"
   },
   "oclif": {
-    "bin": "prisma-migrate-checker",
-    "dirname": "prisma-migrate-checker",
+    "bin": "prisma-migration-checker",
+    "dirname": "prisma-migration-checker",
     "commands": "./dist/commands",
     "default": ".",
     "plugins": [
