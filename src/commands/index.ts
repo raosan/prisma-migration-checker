@@ -41,7 +41,6 @@ Finish checking.
 
     // update env DB
     this.log("Updating env...");
-    execSync("cp ./.env.example ./.env");
     updateEnv("./.env", "DATABASE_URL", flags["database-url"]);
 
     // copy prisma schema file
@@ -60,9 +59,7 @@ Finish checking.
 
     // migrating current schema
     this.log("Migrating current schema...");
-    execSync(
-      `npx prisma migrate dev --name current --schema=${curPrismaTempLocation}`
-    );
+    execSync(`npx prisma db push --schema=${curPrismaTempLocation}`)
 
     // seeding fake data
     execSync(
@@ -72,9 +69,7 @@ Finish checking.
 
     // migrating new schema
     this.log("Migrating new schema...");
-    execSync(
-      `npx prisma migrate dev --name new --schema=${newPrismaTempLocation}`
-    );
+    execSync(`npx prisma db push --schema=${newPrismaTempLocation}`)
 
     this.log("Finish checking.");
     this.log("Migration success.");
