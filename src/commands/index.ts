@@ -1,13 +1,14 @@
 import { Command, Flags } from "@oclif/core";
 import { execSync } from "node:child_process";
-import { updateEnv } from "../scripts/env-edit";
+import * as fs from "node:fs";
+import { readEnv } from "../scripts/env-edit";
 
 export default class PrismaMigrationChecker extends Command {
   static description =
-    "Check if migration success by providing current and new path_to_schema_prisma_file and url_of_the_database";
+    "Check if migration success by providing current and new path_to_schema_prisma_file";
 
   static examples = [
-    `$ oex --new <path_to_new_schema_prisma_file> --current <path_to_current_schema_prisma_file> --database-url <url_of_the_database>
+    `$ oex --new <path_to_new_schema_prisma_file> --current <path_to_current_schema_prisma_file>
 Start checking...
 Finish checking.
 `,
@@ -24,11 +25,6 @@ Finish checking.
       description: "path to current schema prisma file",
       required: true,
     }),
-    "database-url": Flags.string({
-      char: "d",
-      description: "url of the database",
-      required: true,
-    }),
   };
 
   async run(): Promise<void> {
@@ -36,12 +32,17 @@ Finish checking.
 
     this.log("Start checking...");
     this.log(
-      `New schema path: ${flags.new} \nCurrent schema path: ${flags.current}\nDB url: ${flags["database-url"]}`
+      `New schema path: ${flags.new} \nCurrent schema path: ${flags.current}`
     );
 
-    // update env DB
-    this.log("Updating env...");
-    updateEnv("./.env", "DATABASE_URL", flags["database-url"]);
+    // check if new and current same or not. If same, return
+    const curText = fs.readFileSync(flags.current, "utf8");
+    const newText = fs.readFileSync(flags.new, "utf8");
+    if (curText === newText) {
+      this.log("Finish checking.");
+      this.log("No new migration added.");
+      return;
+    }
 
     // copy prisma schema file
     this.log("Copying schema files...");
@@ -52,24 +53,29 @@ Finish checking.
 
     // // reset DB
     this.log("Resetting DB...");
-    execSync(`npx prisma migrate reset --force --skip-generate --schema=${flags.current}`);
+    execSync(
+      `npx prisma migrate reset --force --skip-generate --schema=${flags.current}`
+    );
 
     const curPrismaTempLocation = "./prisma-mc-temp/current-schema.prisma";
     const newPrismaTempLocation = "./prisma-mc-temp/new-schema.prisma";
 
     // migrating current schema
     this.log("Migrating current schema...");
-    execSync(`npx prisma db push --schema=${curPrismaTempLocation}`)
+    execSync(`npx prisma db push --schema=${curPrismaTempLocation}`);
 
     // seeding fake data
     execSync(
-      `npx prisma-seeder --schema ${curPrismaTempLocation} --database-url ${flags["database-url"]}`,
+      `npx prisma-seeder --schema ${curPrismaTempLocation} --database-url ${readEnv(
+        "./.env",
+        "DATABASE_URL"
+      )}`,
       { stdio: "inherit" }
     );
 
     // migrating new schema
     this.log("Migrating new schema...");
-    execSync(`npx prisma db push --schema=${newPrismaTempLocation}`)
+    execSync(`npx prisma db push --schema=${newPrismaTempLocation}`);
 
     this.log("Finish checking.");
     this.log("Migration success.");
