@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "@hyperjumptch/prisma-seeder": "https://github.com/raosan/prisma-seeder/releases/download/v0.0.8/hyperjumptech-prisma-seeder-0.0.8.tgz",
-    "@oclif/core": "^1.19.1",
+    "@oclif/core": "^1.24.0",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.6"
   },
